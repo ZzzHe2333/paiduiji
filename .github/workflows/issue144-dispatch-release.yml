@@ -1,0 +1,24 @@
+name: Dispatch explicit v3.0.0 release
+
+on:
+  push:
+    branches: [release/3.0.0-dispatch]
+    paths:
+      - '.github/workflows/issue144-dispatch-release.yml'
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch validated release workflow
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api --method POST \
+            "repos/${GITHUB_REPOSITORY}/actions/workflows/package-windows-x64.yml/dispatches" \
+            -f ref=now \
+            -f 'inputs[tag_name]=v3.0.0'
